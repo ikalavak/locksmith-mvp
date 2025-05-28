@@ -4,13 +4,15 @@ const client = new KMSClient();
 exports.handler = async () => {
   try {
     const data = await client.send(new ListKeysCommand({}));
+    const count = data.Keys.length;
+
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Enable CORS for all domains
+        'Access-Control-Allow-Origin': '*', // Enable CORS
       },
-      body: JSON.stringify(data.Keys),
+      body: JSON.stringify({ count }),
     };
   } catch (err) {
     return {

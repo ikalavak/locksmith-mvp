@@ -1,26 +1,32 @@
 import React, { useEffect, useState } from 'react';
 
 function App() {
-  const [keyCount, setKeyCount] = useState<number | null>(null);
+  const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/data')  // or your actual backend URL
+    const apiUrl = import.meta.env.VITE_API_URL;
+    console.log("Fetching from:", apiUrl);
 
-      .then(response => response.json())
-      .then(data => {
-        setKeyCount(data.keyCount);
+    fetch(apiUrl)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("API response:", data);
+        setCount(data.count);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((err) => {
+        console.error("API error:", err);
       });
   }, []);
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold">Key Count</h1>
-      {keyCount !== null ? <p>{keyCount}</p> : <p>Loading...</p>}
-    </div>
+    <main className="min-h-screen flex items-center justify-center">
+      <h1 className="text-3xl font-bold">
+        {count === null ? "Loading…" : `${count} keys discovered`}
+      </h1>
+    </main>
   );
 }
 
 export default App;
+
+
